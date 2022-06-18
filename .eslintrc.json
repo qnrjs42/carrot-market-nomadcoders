@@ -1,5 +1,8 @@
 {
   "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["prettier"]
+  "plugins": ["prettier"],
+  "rules": {
+    "react-hooks/rules-of-hooks": "error" // Checks rules of Hooks
+  }
 }
