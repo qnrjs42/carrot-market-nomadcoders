@@ -9,7 +9,11 @@ interface LoginForm {
 }
 
 const FormsPage: NextPage = () => {
-  const { register, handleSubmit } = useForm<LoginForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>();
 
   const onValid = (data: LoginForm) => {
     console.log('im valid bby', data);
@@ -17,6 +21,8 @@ const FormsPage: NextPage = () => {
   const onInValid = (errors: FieldErrors) => {
     console.log(errors);
   };
+
+  console.log(errors);
 
   return (
     <form onSubmit={handleSubmit(onValid, onInValid)}>
@@ -32,10 +38,17 @@ const FormsPage: NextPage = () => {
         placeholder='Username'
       />
       <input
-        {...register('email', { required: 'Email is Required' })}
+        {...register('email', {
+          required: 'Email is Required',
+          validate: {
+            notGamil: value => !value.includes('@gmail.com') || 'Gmail is not allowed',
+          },
+        })}
         type='email'
         placeholder='Email'
+        className={`${Boolean(errors.email?.message) ? 'border-red-500' : ''}`}
       />
+      {errors.email?.message}
       <input
         {...register('password', { required: 'Password is Required' })}
         type='password'
