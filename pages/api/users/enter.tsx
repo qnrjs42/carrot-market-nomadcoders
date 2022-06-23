@@ -8,7 +8,9 @@ const enterApi = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     res.status(401).end();
   }
-  res.status(200).end();
+  res.json({
+    ok: true,
+  });
 };
 
 export default enterApi;
