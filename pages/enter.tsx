@@ -12,6 +12,7 @@ interface EnterForm {
 }
 
 const Enter = () => {
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
   const [method, setMethod] = useState<'email' | 'phone'>('email');
 
@@ -24,8 +25,20 @@ const Enter = () => {
     setMethod('phone');
   };
 
-  const onValid = (data: EnterForm) => {
-    console.log(data);
+  const onValid = async (data: EnterForm) => {
+    try {
+      setSubmitting(true);
+      const response = await fetch('/api/users/enter', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (err) {
+    } finally {
+      setSubmitting(false);
+    }
   };
   return (
     <div className='mt-16 px-4'>
@@ -74,8 +87,10 @@ const Enter = () => {
               required
             />
           ) : null}
-          {method === 'email' ? <Button text={'Get login link'} /> : null}
-          {method === 'phone' ? <Button text={'Get one-time password'} /> : null}
+          {method === 'email' ? <Button text={submitting ? 'Loading' : 'Get login link'} /> : null}
+          {method === 'phone' ? (
+            <Button text={submitting ? 'Loading' : 'Get one-time password'} />
+          ) : null}
         </form>
         <div className='mt-6'>
           <div className='relative'>
