@@ -6,6 +6,7 @@ interface LoginForm {
   username: string;
   email: string;
   password: string;
+  errors?: string;
 }
 
 const FormsPage: NextPage = () => {
@@ -13,10 +14,17 @@ const FormsPage: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
+    setError,
+    setValue,
+    reset,
+    resetField,
   } = useForm<LoginForm>();
 
   const onValid = (data: LoginForm) => {
     console.log('im valid bby', data);
+    setError('username', { message: 'Taken username.' });
+    resetField('password');
   };
   const onInValid = (errors: FieldErrors) => {
     console.log(errors);
@@ -37,6 +45,7 @@ const FormsPage: NextPage = () => {
         type='text'
         placeholder='Username'
       />
+      {errors.username?.message}
       <input
         {...register('email', {
           required: 'Email is Required',
