@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React, { FC } from 'react';
 import { useRouter } from 'next/router';
 
-import { cls } from '../libs/utils';
+import { cls } from '../libs/client/utils';
 
 interface IProps {
   title?: string;
