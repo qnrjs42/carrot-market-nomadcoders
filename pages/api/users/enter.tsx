@@ -6,6 +6,69 @@ import withHandler from '@libs/server/withHandler';
 const enterApi = async (req: NextApiRequest, res: NextApiResponse) => {
   console.log(req.body);
 
+  const { phone, email } = req.body;
+  const payload = phone ? { phone: +phone } : { email };
+  let user;
+
+  user = await client.user.upsert({
+    where: {
+      ...payload,
+    },
+    create: {
+      name: 'Anonymous',
+      ...payload,
+    },
+    update: {},
+  });
+
+  console.log('user', user);
+
+  // if (email) {
+  //   user = await client.user.findUnique({
+  //     where: {
+  //       email,
+  //     },
+  //   });
+
+  //   if (user) console.log('found it');
+
+  //   if (!user) {
+  //     console.log('did not found. will create');
+
+  //     user = await client.user.create({
+  //       data: {
+  //         name: 'Anonymous',
+  //         email,
+  //       },
+  //     });
+  //   }
+
+  //   console.log(user);
+  // }
+
+  // if (phone) {
+  //   user = await client.user.findUnique({
+  //     where: {
+  //       phone: +phone,
+  //     },
+  //   });
+
+  //   if (user) console.log('found it');
+
+  //   if (!user) {
+  //     console.log('did not found. will create');
+
+  //     user = await client.user.create({
+  //       data: {
+  //         name: 'Anonymous',
+  //         phone: +phone,
+  //       },
+  //     });
+  //   }
+
+  //   console.log(user);
+  // }
+
   return res.status(200).end();
 };
 
