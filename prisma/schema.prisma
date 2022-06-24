@@ -13,11 +13,24 @@ datasource db {
 }
 
 model User {
-  id        Int @id @default(autoincrement())
-  phone     Int? @unique
-  email     String? @unique
+  id        Int      @id @default(autoincrement())
+  phone     Int?     @unique
+  email     String?  @unique
   name      String
   avatar    String?
-  createAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tokens    Token[]
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  payload   String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// 모델 만들고 'npx prisma db push'
+// https://app.planetscale.com/qnrjs42/carrot-market/main/schema
