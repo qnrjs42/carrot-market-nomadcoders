@@ -4,6 +4,14 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import client from '@libs/server/client';
 import withHandler, { ResponseType } from '@libs/server/withHandler';
 
+declare module 'iron-session' {
+  interface IronSessionData {
+    user?: {
+      id: number;
+    };
+  }
+}
+
 const enterApi = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
   const { token } = req.body;
 
@@ -11,7 +19,7 @@ const enterApi = async (req: NextApiRequest, res: NextApiResponse<ResponseType>)
     where: { payload: token },
   });
 
-  if (!exists) res.status(404).end();
+  if (!exists) return res.status(404).end();
 
   req.session.user = {
     id: exists?.userId,
