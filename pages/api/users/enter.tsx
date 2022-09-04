@@ -62,4 +62,4 @@ const enterApi = async (req: NextApiRequest, res: NextApiResponse<ResponseType>)
   });
 };
 
-export default withHandler('POST', enterApi);
+export default withHandler({ method: 'POST', handler: enterApi, isPrivate: false });
