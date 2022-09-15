@@ -4,7 +4,15 @@ import client from '@libs/server/client';
 import withApiSession from '@libs/server/withSession';
 import withHandler, { ResponseType } from '@libs/server/withHandler';
 
-const productsApi = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
+const getHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
+  const products = await client.product.findMany({});
+  return res.json({
+    ok: true,
+    products,
+  });
+};
+
+const postHandler = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
   const {
     body: { name, price, description },
     session: { user },
@@ -30,4 +38,12 @@ const productsApi = async (req: NextApiRequest, res: NextApiResponse<ResponseTyp
   });
 };
 
-export default withApiSession(withHandler({ method: 'POST', handler: productsApi }));
+const productsApi = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) => {
+  if (req.method === 'GET') {
+    return getHandler(req, res);
+  } else if (req.method === 'POST') {
+    return postHandler(req, res);
+  }
+};
+
+export default withApiSession(withHandler({ methods: ['GET', 'POST'], handler: productsApi }));

@@ -37,4 +37,6 @@ const enterApi = async (req: NextApiRequest, res: NextApiResponse<ResponseType>)
   });
 };
 
-export default withApiSession(withHandler({ method: 'POST', handler: enterApi, isPrivate: false }));
+export default withApiSession(
+  withHandler({ methods: ['POST'], handler: enterApi, isPrivate: false }),
+);

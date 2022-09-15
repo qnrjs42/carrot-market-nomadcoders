@@ -17,4 +17,4 @@ const meApi = async (req: NextApiRequest, res: NextApiResponse<ResponseType>) =>
   });
 };
 
-export default withApiSession(withHandler({ method: 'GET', handler: meApi }));
+export default withApiSession(withHandler({ methods: ['GET'], handler: meApi }));
