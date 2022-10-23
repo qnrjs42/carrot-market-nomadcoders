@@ -23,13 +23,16 @@ const ItemDetail: NextPage = () => {
   const router = useRouter();
   console.log(router.query);
 
-  const { data } = useSWR<ItemDetailResponse>(
+  const { data, mutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null,
   );
 
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
 
   const onFavClick = () => {
+    if (!data) return;
+
+    mutate({ ...data, isLiked: !data.isLiked }, false);
     toggleFav({});
   };
 
@@ -101,13 +104,13 @@ const ItemDetail: NextPage = () => {
         <div>
           <h2 className='text-2xl font-bold text-gray-900'>Similar items</h2>
           <div className='grid grid-cols-2 gap-4'>
-            {data?.relatedProducts.map((product, i) => (
+            {/* {data?.relatedProducts.map((product, i) => (
               <div key={product.id}>
                 <div className='mb-6 h-56 w-full bg-slate-300' />
                 <h3 className='text-gray-700 -mb-1'>{product.name}</h3>
                 <p className='text-xs font-medium text-gray-900'>$${product.price}</p>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
       </div>
