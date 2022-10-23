@@ -31,7 +31,7 @@ const Home: NextPage = () => {
             title={product.name}
             price={product.price}
             image={product.image}
-            hearts={1}
+            hearts={product._count.favs}
           />
         ))}
         <button className='fixed hover:bg-orange-500 transition-colors cursor-pointer bottom-24 right-5 shadow-xl bg-orange-400 rounded-full p-4 text-white'>
