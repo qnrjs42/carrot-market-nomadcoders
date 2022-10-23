@@ -1,14 +1,28 @@
-import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import Layout from '@components/layout';
 import useSWR from 'swr';
 import Link from 'next/link';
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+
+import Layout from '@components/layout';
+import { Product, User } from '@prisma/client';
+
+interface ProductWithUser extends Product {
+  user: User;
+}
+
+interface ItemDetailResponse {
+  ok: boolean;
+  product: ProductWithUser;
+  relatedProducts: Product[];
+}
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
   console.log(router.query);
 
-  const { data } = useSWR(router.query.id ? `/api/products/${router.query.id}` : null);
+  const { data } = useSWR<ItemDetailResponse>(
+    router.query.id ? `/api/products/${router.query.id}` : null,
+  );
 
   console.log(data);
 
@@ -57,11 +71,11 @@ const ItemDetail: NextPage = () => {
         <div>
           <h2 className='text-2xl font-bold text-gray-900'>Similar items</h2>
           <div className='grid grid-cols-2 gap-4'>
-            {[1, 2, 3, 4, 5, 6].map((_, i) => (
-              <div key={i}>
+            {data?.relatedProducts.map((product, i) => (
+              <div key={product.id}>
                 <div className='mb-6 h-56 w-full bg-slate-300' />
-                <h3 className='text-gray-700 -mb-1'>Galaxy S60</h3>
-                <p className='text-xs font-medium text-gray-900'>$6</p>
+                <h3 className='text-gray-700 -mb-1'>{product.name}</h3>
+                <p className='text-xs font-medium text-gray-900'>$${product.price}</p>
               </div>
             ))}
           </div>
