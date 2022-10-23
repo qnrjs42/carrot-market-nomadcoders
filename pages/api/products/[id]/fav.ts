@@ -8,7 +8,7 @@ const productsFavApi = async (req: NextApiRequest, res: NextApiResponse<Response
   const {
     query: { id },
     session: { user },
-  } = req.query;
+  } = req;
 
   const alreadytExists = await client.fav.findFirst({
     where: {
